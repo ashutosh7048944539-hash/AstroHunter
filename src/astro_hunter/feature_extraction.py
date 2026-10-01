@@ -178,24 +178,60 @@ def bin_phase_folded_lightcurve(
 
     return centers, means, counts
 
-
 def phase_fold_lightcurve(
     time: np.ndarray,
     flux: np.ndarray,
     period: float,
     reference_time: float | None = None,
+    reference_phase: float | None = None,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
     Phase fold a light curve around a trial period.
+
+    Parameters
+    ----------
+    time:
+        Observation times.
+
+    flux:
+        Corresponding flux values.
+
+    period:
+        Trial/detected period in days.
+
+    reference_time:
+        Time corresponding to phase zero.
+        If None, time[0] is used.
+
+    reference_phase:
+        Optional phase to shift to zero before folding.
+        This is useful when BLS provides the location of
+        the detected transit.
+
+    Returns
+    -------
+    phase:
+        Phase values in [-0.5, 0.5).
+
+    flux:
+        Unchanged flux values.
     """
 
     if reference_time is None:
         reference_time = time[0]
 
-    phase = ((time - reference_time) / period + 0.5) % 1.0 - 0.5
+    phase = (
+        (time - reference_time) / period
+        + 0.5
+    ) % 1.0 - 0.5
+
+    # Shift the supplied reference phase to phase = 0.
+    if reference_phase is not None:
+        phase = (
+            phase - reference_phase + 0.5
+        ) % 1.0 - 0.5
 
     return phase, flux
-
 
 def _robust_scatter(flux: np.ndarray) -> float:
     """
