@@ -53,11 +53,33 @@ The resulting phase-folded validation plot is available at:
 
 ## Project Structure
 
-
+```text
+AstroHunter/
+|-- data/
+|   |-- ml/
+|   `-- raw/
+|-- reports/
+|   `-- toi_2025_validation.png
+|-- src/
+|   `-- astro_hunter/
+|       |-- data_quality.py
+|       |-- preprocess.py
+|       |-- transit_detection.py
+|       |-- feature_extraction.py
+|       |-- validate_candidate.py
+|       |-- batch_feature_extraction.py
+|       |-- ml_baseline.py
+|       |-- ml_random_forest.py
+|       `-- ...
+|-- notebooks/
+|-- tests/
+|-- requirements.txt
+`-- README.md
+```
 
 ## Installation
 
-Create a virtual environment if you do not already have one:
+If you do not already have a virtual environment, create one:
 
 ```powershell
 python -m venv .venv
@@ -69,31 +91,29 @@ Activate the environment:
 .\.venv\Scripts\Activate.ps1
 ```
 
-Install dependencies:
+Install the project dependencies:
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-## Running the Pipeline
+## Running Candidate Validation
 
-From the project root:
+From the project root, set the source path:
 
 ```powershell
 $env:PYTHONPATH="src"
 ```
 
-Run preprocessing:
-
-```powershell
-python -m astro_hunter.preprocess
-```
-
-Run candidate validation:
+Run the candidate validation pipeline:
 
 ```powershell
 python -m astro_hunter.validate_candidate
 ```
+
+The validation script analyzes the configured TESS light curve and saves the validation figure to:
+
+`reports/toi_2025_validation.png`
 
 ## Data
 
